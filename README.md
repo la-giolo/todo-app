@@ -1,6 +1,6 @@
 # About
 
-ToDo Application for onboarding assessment
+ToDo Application for onboarding assessment.
 Created by: Sergio Paulo Perez
 
 ## Setup

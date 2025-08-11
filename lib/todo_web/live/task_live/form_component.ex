@@ -9,7 +9,7 @@ defmodule TodoWeb.TaskLive.FormComponent do
     <div>
       <.header>
         {@title}
-        <:subtitle>Use this form to manage task records in your database.</:subtitle>
+        <:subtitle>Add a task to your list</:subtitle>
       </.header>
 
       <.simple_form
@@ -20,7 +20,7 @@ defmodule TodoWeb.TaskLive.FormComponent do
         phx-submit="save"
       >
         <.input field={@form[:title]} type="text" label="Title" />
-        <.input field={@form[:is_completed]} type="checkbox" label="Is completed" />
+        <%!-- <.input field={@form[:is_completed]} type="checkbox" label="Is completed" /> --%>
         <:actions>
           <.button phx-disable-with="Saving...">Save Task</.button>
         </:actions>

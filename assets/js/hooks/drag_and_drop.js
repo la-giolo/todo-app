@@ -34,13 +34,14 @@ let DragAndDrop = {
 
         let draggedId = draggedEl.dataset.id
         let movedIndex = rows.findIndex(row => row.dataset.id === draggedId)
-        console.log("ROWS: ", rows)
-        console.log("Dragged element: ", draggedId)
 
         let beforeEl = rows[movedIndex - 1] || null
         let nextEl = rows[movedIndex + 1] || null
 
-        console.log("Drag and Drop ID: ", draggedId)
+        console.log("Dragged element: ", draggedId)
+        console.log("Before element: ", beforeEl.dataset.id)
+        console.log("Next element: ", nextEl.dataset.id)
+
         this.pushEvent("reorder_task", {
           moved_id: draggedId,
           before_id: beforeEl ? beforeEl.dataset.id : null,

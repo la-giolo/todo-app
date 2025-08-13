@@ -488,16 +488,16 @@ defmodule TodoWeb.CoreComponents do
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
           class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
         >
-          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
+          <tr :for={{dom_id, task} <- @rows} id={@row_id && @row_id.({dom_id, task})} data-id={task.id} class="group hover:bg-zinc-50">
             <td
               :for={{col, i} <- Enum.with_index(@col)}
-              phx-click={@row_click && @row_click.(row)}
+              phx-click={@row_click && @row_click.({dom_id, task})}
               class={["relative p-0", @row_click && "hover:cursor-pointer"]}
             >
               <div class="block py-4 pr-6">
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
                 <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
-                  {render_slot(col, @row_item.(row))}
+                  {render_slot(col, @row_item.({dom_id, task}))}
                 </span>
               </div>
             </td>
@@ -508,7 +508,7 @@ defmodule TodoWeb.CoreComponents do
                   :for={action <- @action}
                   class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
                 >
-                  {render_slot(action, @row_item.(row))}
+                  {render_slot(action, @row_item.({dom_id, task}))}
                 </span>
               </div>
             </td>

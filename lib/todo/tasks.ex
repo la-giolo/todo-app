@@ -18,7 +18,9 @@ defmodule Todo.Tasks do
 
   """
   def list_tasks do
-    Repo.all(Task)
+    Task
+    |> order_by(:position)
+    |> Repo.all()
   end
 
   @doc """
@@ -50,6 +52,12 @@ defmodule Todo.Tasks do
 
   """
   def create_task(attrs \\ %{}) do
+    max_position = Repo.one(from t in Task, select: max(t.position)) || 0
+
+    next_position = max_position + 1000
+
+    attrs = Map.put(attrs, "position", next_position)
+
     %Task{}
     |> Task.changeset(attrs)
     |> Repo.insert()
@@ -71,6 +79,45 @@ defmodule Todo.Tasks do
     task
     |> Task.changeset(attrs)
     |> Repo.update()
+  end
+
+  def reorder_task(moved_id, before_id, next_id) do
+    before_pos =
+      if before_id,
+        do: Repo.get!(Task, before_id).position,
+        else: nil
+
+    next_pos =
+      if next_id,
+        do: Repo.get!(Task, next_id).position,
+        else: nil
+
+    new_pos = calculate_new_pos(before_pos, next_pos)
+
+    Task
+    |> Repo.get!(moved_id)
+    |> Ecto.Changeset.change(position: new_pos)
+    |> Repo.update!()
+  end
+
+  defp calculate_new_pos(nil, nil) do
+    # only item in the list
+    1000
+  end
+
+  defp calculate_new_pos(nil, next) do
+    # moved to very top
+    div(next, 2)
+  end
+
+  defp calculate_new_pos(before, nil) do
+    # moved to very bottom
+    before + 1000
+  end
+
+  defp calculate_new_pos(before, next) do
+    # placed between two tasks
+    div(before + next, 2)
   end
 
   @doc """

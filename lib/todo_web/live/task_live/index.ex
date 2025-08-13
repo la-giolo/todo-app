@@ -42,6 +42,18 @@ defmodule TodoWeb.TaskLive.Index do
   end
 
   @impl true
+  def handle_event(
+        "reorder_task",
+        %{"moved_id" => moved_id, "before_id" => before_id, "next_id" => next_id},
+        socket
+      ) do
+
+    Tasks.reorder_task(moved_id, before_id, next_id)
+
+    {:noreply, assign(socket, :tasks, Tasks.list_tasks())}
+  end
+
+  @impl true
   def handle_event("delete", %{"id" => id}, socket) do
     task = Tasks.get_task!(id)
     {:ok, _} = Tasks.delete_task(task)

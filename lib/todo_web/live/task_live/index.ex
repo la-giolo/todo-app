@@ -43,14 +43,23 @@ defmodule TodoWeb.TaskLive.Index do
 
   @impl true
   def handle_event(
-        "reorder_task",
-        %{"moved_id" => moved_id, "before_id" => before_id, "next_id" => next_id},
+                    "reorder_task",
+                    %{"moved_id" => moved_id, "before_id" => before_id, "next_id" => next_id},
+                    socket
+                  ) do
+
+    case Tasks.reorder_task(moved_id, before_id, next_id) do
+      {:ok, _task} ->
+        {:noreply,
         socket
-      ) do
+        |> put_flash(:info, "Tasks reordered successfully")
+        |> assign(:tasks, Tasks.list_tasks())}
 
-    Tasks.reorder_task(moved_id, before_id, next_id)
-
-    {:noreply, assign(socket, :tasks, Tasks.list_tasks())}
+      {:error, reason} ->
+        {:noreply,
+        socket
+        |> put_flash(:error, "Failed to reorder tasks: #{reason}")}
+    end
   end
 
   @impl true

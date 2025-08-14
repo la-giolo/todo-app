@@ -1,6 +1,5 @@
 let DragAndDrop = {
   mounted() {
-    console.log("Drag and Drop hook called")
     let draggedEl = null
 
     this.el.querySelectorAll("tbody tr").forEach(row => {
@@ -37,10 +36,6 @@ let DragAndDrop = {
 
         let beforeEl = rows[movedIndex - 1] || null
         let nextEl = rows[movedIndex + 1] || null
-
-        console.log("Dragged element: ", draggedId)
-        console.log("Before element: ", beforeEl.dataset.id)
-        console.log("Next element: ", nextEl.dataset.id)
 
         this.pushEvent("reorder_task", {
           moved_id: draggedId,

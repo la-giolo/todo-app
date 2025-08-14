@@ -83,21 +83,37 @@ defmodule Todo.Tasks do
 
   def reorder_task(moved_id, before_id, next_id) do
     before_pos =
-      if before_id,
-        do: Repo.get!(Task, before_id).position,
-        else: nil
+      if before_id do
+        case Repo.get(Task, before_id) do
+          nil -> nil
+
+          task -> task.position
+        end
+      else
+        nil
+      end
 
     next_pos =
-      if next_id,
-        do: Repo.get!(Task, next_id).position,
-        else: nil
+      if next_id do
+        case Repo.get(Task, next_id) do
+          nil -> nil
+
+          task -> task.position
+        end
+      else
+        nil
+      end
 
     new_pos = calculate_new_pos(before_pos, next_pos)
 
-    Task
-    |> Repo.get!(moved_id)
-    |> Ecto.Changeset.change(position: new_pos)
-    |> Repo.update!()
+    case Repo.get(Task, moved_id) do
+      nil -> {:error, "Task with ID #{moved_id} not found"}
+
+      task ->
+        task
+        |> Ecto.Changeset.change(position: new_pos)
+        |> Repo.update()
+    end
   end
 
   defp calculate_new_pos(nil, nil) do

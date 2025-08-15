@@ -22,3 +22,10 @@ config :phoenix, :plug_init_mode, :runtime
 # Enable helpful, but potentially expensive runtime checks
 config :phoenix_live_view,
   enable_expensive_runtime_checks: true
+
+config :todo, Todo.Repo,
+  username: "postgres",
+  password: "ggggg",
+  database: "todo_test",
+  hostname: "localhost",
+  pool: Ecto.Adapters.SQL.Sandbox

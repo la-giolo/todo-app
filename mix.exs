@@ -57,7 +57,8 @@ defmodule Todo.MixProject do
       {:bandit, "~> 1.5"},
       {:ecto_sql, "~> 3.11"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_ecto, "~> 4.4"}
+      {:phoenix_ecto, "~> 4.4"},
+      {:lazy_html, ">= 0.1.0", only: :test}
     ]
   end
 
